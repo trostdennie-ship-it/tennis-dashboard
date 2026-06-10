@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Aufschlag · Tennis-Dashboard</title>
+  <meta name="description" content="Ein einfaches Tennis-Dashboard: nächste Grand Slams mit Countdown, wo & wann sie laufen, Weltrangliste (ATP & WTA), Spielplan und Liveticker – auf Deutsch, fürs iPhone." />
+
+  <!-- Farbschema & PWA -->
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#eef1ea" id="meta-theme-color" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Aufschlag" />
+  <link rel="manifest" href="manifest.webmanifest" />
+
+  <!-- App-Icons -->
+  <link rel="icon" href="icons/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+
+  <!-- Schriften (mit System-Fallback, falls offline noch nicht im Cache) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Theme & Schriftgröße SOFORT setzen (verhindert kurzes Aufblitzen beim Start) -->
+  <script>
+    (function () {
+      try {
+        var p = JSON.parse(localStorage.getItem('aufschlag.settings') || '{}');
+        var root = document.documentElement;
+        // Hell ist Standard; Dunkel nur, wenn aktiv gewählt.
+        if (p.theme === 'dark') root.setAttribute('data-theme', 'dark');
+        if (p.fontScale) root.style.setProperty('--font-scale', p.fontScale);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <!-- Die App wird komplett per JavaScript in diesen Container gerendert -->
+  <div id="app" aria-live="polite"></div>
+
+  <!-- Reihenfolge ist wichtig: Konfiguration → Daten → Icons → API → Live → App -->
+  <script src="config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/live.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

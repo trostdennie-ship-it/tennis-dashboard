@@ -1,0 +1,219 @@
+{
+  "label": "WTA Damen",
+  "updated": "2026-06-08",
+  "source": "Jeff Sackmann / GitHub",
+  "list": [
+    {
+      "rank": 1,
+      "name": "Aryna Sabalenka",
+      "country": "BLR",
+      "points": 9090,
+      "move": 0,
+      "age": 28,
+      "de": false
+    },
+    {
+      "rank": 2,
+      "name": "Elena Rybakina",
+      "country": "KAZ",
+      "points": 8143,
+      "move": 0,
+      "age": 26,
+      "de": false
+    },
+    {
+      "rank": 3,
+      "name": "Iga Świątek",
+      "country": "POL",
+      "points": 6733,
+      "move": 0,
+      "age": 25,
+      "de": false
+    },
+    {
+      "rank": 4,
+      "name": "Jessica Pegula",
+      "country": "USA",
+      "points": 6056,
+      "move": 1,
+      "age": 32,
+      "de": false
+    },
+    {
+      "rank": 5,
+      "name": "Amanda Anisimova",
+      "country": "USA",
+      "points": 5848,
+      "move": 1,
+      "age": 24,
+      "de": false
+    },
+    {
+      "rank": 6,
+      "name": "Mirra Andreeva",
+      "country": "RUS",
+      "points": 5751,
+      "move": 2,
+      "age": 19,
+      "de": false
+    },
+    {
+      "rank": 7,
+      "name": "Coco Gauff",
+      "country": "USA",
+      "points": 4879,
+      "move": -3,
+      "age": 22,
+      "de": false
+    },
+    {
+      "rank": 8,
+      "name": "Elina Svitolina",
+      "country": "UKR",
+      "points": 4315,
+      "move": -1,
+      "age": 31,
+      "de": false
+    },
+    {
+      "rank": 9,
+      "name": "Victoria Mboko",
+      "country": "CAN",
+      "points": 3670,
+      "move": 0,
+      "age": 19,
+      "de": false
+    },
+    {
+      "rank": 10,
+      "name": "Karolína Muchová",
+      "country": "CZE",
+      "points": 3438,
+      "move": 0,
+      "age": 29,
+      "de": false
+    },
+    {
+      "rank": 11,
+      "name": "Belinda Bencic",
+      "country": "SUI",
+      "points": 3385,
+      "move": 0,
+      "age": 29,
+      "de": false
+    },
+    {
+      "rank": 12,
+      "name": "Marta Kostyuk",
+      "country": "UKR",
+      "points": 3157,
+      "move": 3,
+      "age": 23,
+      "de": false
+    },
+    {
+      "rank": 13,
+      "name": "Linda Nosková",
+      "country": "CZE",
+      "points": 3054,
+      "move": -1,
+      "age": 21,
+      "de": false
+    },
+    {
+      "rank": 14,
+      "name": "Jasmine Paolini",
+      "country": "ITA",
+      "points": 2617,
+      "move": -1,
+      "age": 30,
+      "de": false
+    },
+    {
+      "rank": 15,
+      "name": "Naomi Osaka",
+      "country": "JPN",
+      "points": 2571,
+      "move": 1,
+      "age": 28,
+      "de": false
+    },
+    {
+      "rank": 16,
+      "name": "Diana Shnaider",
+      "country": "RUS",
+      "points": 2506,
+      "move": 7,
+      "age": 22,
+      "de": false
+    },
+    {
+      "rank": 17,
+      "name": "Ekaterina Alexandrova",
+      "country": "RUS",
+      "points": 2449,
+      "move": -3,
+      "age": 31,
+      "de": false
+    },
+    {
+      "rank": 18,
+      "name": "Sorana Cîrstea",
+      "country": "ROU",
+      "points": 2415,
+      "move": 0,
+      "age": 36,
+      "de": false
+    },
+    {
+      "rank": 19,
+      "name": "Iva Jovic",
+      "country": "USA",
+      "points": 2366,
+      "move": -2,
+      "age": 18,
+      "de": false
+    },
+    {
+      "rank": 20,
+      "name": "Anna Kalinskaya",
+      "country": "RUS",
+      "points": 2212,
+      "move": 4,
+      "age": 27,
+      "de": false
+    }
+  ],
+  "germans": [
+    {
+      "rank": 44,
+      "name": "Laura Siegemund",
+      "country": "GER"
+    },
+    {
+      "rank": 52,
+      "name": "Tatjana Maria",
+      "country": "GER"
+    },
+    {
+      "rank": 79,
+      "name": "Tamara Korpatsch",
+      "country": "GER"
+    },
+    {
+      "rank": 82,
+      "name": "Eva Lys",
+      "country": "GER"
+    },
+    {
+      "rank": 95,
+      "name": "Ella Seidel",
+      "country": "GER"
+    },
+    {
+      "rank": 154,
+      "name": "Noma Noha Akugue",
+      "country": "GER"
+    }
+  ]
+}

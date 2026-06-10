@@ -1,0 +1,54 @@
+# =================================================================
+# Aktualisiert 1× täglich automatisch die Weltrangliste (ATP & WTA).
+# Holt die Daten kostenlos & ohne Schlüssel, schreibt sie in
+# data/rankings-*.json und committet die Änderung.
+#
+# Läuft komplett in der GitHub-Cloud – dein Mac muss NICHT an sein.
+#
+# Du kannst sie auch jederzeit von Hand starten:
+#   GitHub → Tab "Actions" → "Rangliste aktualisieren" → "Run workflow"
+# =================================================================
+name: Rangliste aktualisieren
+
+on:
+  schedule:
+    # 04:17 UTC = ca. 06:17 deutscher Zeit. Die Rangliste ändert sich
+    # offiziell montags; an anderen Tagen passiert einfach nichts.
+    - cron: '17 4 * * *'
+  workflow_dispatch: {}   # erlaubt manuelles Auslösen per Knopf
+
+# Erlaubt der Action, den aktualisierten Datenstand zurück ins Repo zu schreiben
+permissions:
+  contents: write
+
+# Verhindert, dass sich zwei Läufe überschneiden
+concurrency:
+  group: update-rankings
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Node einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Aktuelle Rangliste holen
+        run: node scripts/update-rankings.mjs
+
+      - name: Änderungen committen (nur wenn sich etwas geändert hat)
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/rankings-atp.json data/rankings-wta.json
+          if git diff --staged --quiet; then
+            echo "Keine Änderung – Rangliste ist bereits aktuell."
+          else
+            git commit -m "Rangliste automatisch aktualisiert ($(date -u +%Y-%m-%d))"
+            git push
+          fi

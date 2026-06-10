@@ -1,0 +1,9 @@
+# Lokale Editor-/Tool-Dateien
+.claude/
+.DS_Store
+
+# Verteil-Paket (wird bei Bedarf neu erzeugt, gehört nicht ins Repo)
+tennis-dashboard-deploy.zip
+
+# Optionale lokale Geheimnisse (diese App braucht keine)
+.env

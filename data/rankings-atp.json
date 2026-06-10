@@ -1,0 +1,219 @@
+{
+  "label": "ATP Herren",
+  "updated": "2026-06-08",
+  "source": "Jeff Sackmann / GitHub",
+  "list": [
+    {
+      "rank": 1,
+      "name": "Jannik Sinner",
+      "country": "ITA",
+      "points": 13500,
+      "move": 0,
+      "age": 24,
+      "de": false
+    },
+    {
+      "rank": 2,
+      "name": "Carlos Alcaraz",
+      "country": "ESP",
+      "points": 9960,
+      "move": 0,
+      "age": 23,
+      "de": false
+    },
+    {
+      "rank": 3,
+      "name": "Alexander Zverev",
+      "country": "GER",
+      "points": 7305,
+      "move": 0,
+      "age": 29,
+      "de": true
+    },
+    {
+      "rank": 4,
+      "name": "Félix Auger-Aliassime",
+      "country": "CAN",
+      "points": 4440,
+      "move": 2,
+      "age": 25,
+      "de": false
+    },
+    {
+      "rank": 5,
+      "name": "Ben Shelton",
+      "country": "USA",
+      "points": 3920,
+      "move": 0,
+      "age": 23,
+      "de": false
+    },
+    {
+      "rank": 6,
+      "name": "Alex de Minaur",
+      "country": "AUS",
+      "points": 3905,
+      "move": 1,
+      "age": 27,
+      "de": false
+    },
+    {
+      "rank": 7,
+      "name": "Novak Djokovic",
+      "country": "SRB",
+      "points": 3760,
+      "move": -3,
+      "age": 39,
+      "de": false
+    },
+    {
+      "rank": 8,
+      "name": "Daniil Medvedev",
+      "country": "RUS",
+      "points": 3760,
+      "move": 0,
+      "age": 30,
+      "de": false
+    },
+    {
+      "rank": 9,
+      "name": "Taylor Fritz",
+      "country": "USA",
+      "points": 3720,
+      "move": 0,
+      "age": 28,
+      "de": false
+    },
+    {
+      "rank": 10,
+      "name": "Flavio Cobolli",
+      "country": "ITA",
+      "points": 3540,
+      "move": 4,
+      "age": 24,
+      "de": false
+    },
+    {
+      "rank": 11,
+      "name": "Alexander Bublik",
+      "country": "KAZ",
+      "points": 2930,
+      "move": -1,
+      "age": 28,
+      "de": false
+    },
+    {
+      "rank": 12,
+      "name": "Jiří Lehečka",
+      "country": "CZE",
+      "points": 2575,
+      "move": 0,
+      "age": 24,
+      "de": false
+    },
+    {
+      "rank": 13,
+      "name": "Andrey Rublev",
+      "country": "RUS",
+      "points": 2460,
+      "move": 0,
+      "age": 28,
+      "de": false
+    },
+    {
+      "rank": 14,
+      "name": "Casper Ruud",
+      "country": "NOR",
+      "points": 2425,
+      "move": 2,
+      "age": 27,
+      "de": false
+    },
+    {
+      "rank": 15,
+      "name": "Karen Khachanov",
+      "country": "RUS",
+      "points": 2320,
+      "move": 0,
+      "age": 30,
+      "de": false
+    },
+    {
+      "rank": 16,
+      "name": "Lorenzo Musetti",
+      "country": "ITA",
+      "points": 2315,
+      "move": -5,
+      "age": 24,
+      "de": false
+    },
+    {
+      "rank": 17,
+      "name": "Jakub Menšík",
+      "country": "CZE",
+      "points": 2300,
+      "move": 10,
+      "age": 20,
+      "de": false
+    },
+    {
+      "rank": 18,
+      "name": "Luciano Darderi",
+      "country": "ITA",
+      "points": 2300,
+      "move": -1,
+      "age": 24,
+      "de": false
+    },
+    {
+      "rank": 19,
+      "name": "Learner Tien",
+      "country": "USA",
+      "points": 2270,
+      "move": -1,
+      "age": 20,
+      "de": false
+    },
+    {
+      "rank": 20,
+      "name": "Valentin Vacherot",
+      "country": "MON",
+      "points": 2145,
+      "move": -1,
+      "age": 27,
+      "de": false
+    }
+  ],
+  "germans": [
+    {
+      "rank": 3,
+      "name": "Alexander Zverev",
+      "country": "GER"
+    },
+    {
+      "rank": 59,
+      "name": "Yannick Hanfmann",
+      "country": "GER"
+    },
+    {
+      "rank": 77,
+      "name": "Jan-Lennard Struff",
+      "country": "GER"
+    },
+    {
+      "rank": 85,
+      "name": "Daniel Altmaier",
+      "country": "GER"
+    },
+    {
+      "rank": 218,
+      "name": "Justin Engel",
+      "country": "GER"
+    },
+    {
+      "rank": 229,
+      "name": "Tom Gentzsch",
+      "country": "GER"
+    }
+  ]
+}

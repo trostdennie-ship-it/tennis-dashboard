@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Aufschlag Tennis">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#124a2f"/>
+      <stop offset="1" stop-color="#092d1c"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="100" height="100" rx="22" fill="url(#g)"/>
+  <circle cx="50" cy="50" r="32" fill="#d8e36a" stroke="#96a53c" stroke-width="1"/>
+  <g fill="none" stroke="#ffffff" stroke-width="4.6" stroke-linecap="round">
+    <path d="M25.1 25.1 C35.8 34 35.8 59 25.1 74.9"/>
+    <path d="M74.9 25.1 C64.2 34 64.2 59 74.9 74.9"/>
+  </g>
+</svg>
