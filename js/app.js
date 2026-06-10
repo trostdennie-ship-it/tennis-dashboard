@@ -198,7 +198,8 @@
             el('div', { class: 'hero__days-label' }, live ? 'live' : (days === 1 ? 'Tag' : 'Tage')))),
         el('div', { class: 'hero__meta' },
           el('span', null, ic('calendar', { size: 15 }), H.fmtRange(slam.start, slam.end)),
-          el('span', null, el('span', { class: 'surface-dot' }), slam.surfaceLabel))));
+          el('span', null, el('span', { class: 'surface-dot' }), slam.surfaceLabel),
+          slam.provisional ? el('span', { class: 'provisional-tag' }, 'Termin vorläufig') : null)));
   }
 
   // ── Daten-Hinweis (dezent) ────────────────────────────────────
@@ -222,7 +223,8 @@
     const bcasts = next.broadcasters.map(k => T.BROADCASTERS[k]);
     const finished = slams.find(s => s.done);
     const talents = featured.map(displayTracked).filter(Boolean);
-    const upcoming = slams.filter(s => H.slamStatus(s) !== 'done' && s.id !== next.id);
+    const upcoming = slams.filter(s => H.slamStatus(s) !== 'done' && s.id !== next.id)
+      .sort((a, b) => H.parse(a.start) - H.parse(b.start)).slice(0, 5);
     const firstRound = next.rounds && next.rounds[0];
     const final = next.rounds && next.rounds[next.rounds.length - 1];
 
@@ -272,7 +274,7 @@
           el('span', { class: 'slam-row__dot ' + dotClass(s.surface) }),
           el('div', { class: 'slam-row__main' },
             el('div', { class: 'slam-row__name' }, s.name),
-            el('div', { class: 'slam-row__sub' }, s.city + ' · ' + s.surfaceLabel)),
+            el('div', { class: 'slam-row__sub' }, s.city + ' · ' + s.surfaceLabel + (s.provisional ? ' · vorläufig' : ''))),
           el('div', { class: 'slam-row__date' }, H.fmtDate(s.start)),
           ic('chevron', { size: 16 }, 'slam-row__chev'))))) : null;
 
@@ -373,7 +375,10 @@
 
   // ── 3 · SPIELPLAN ─────────────────────────────────────────────
   function scheduleScreen() {
-    const slams = T.SLAMS.filter(s => s.rounds);
+    // Nur die aktuellen/kommenden Turniere zeigen (sonst überläuft die Tab-Leiste)
+    const withRounds = T.SLAMS.filter(s => s.rounds).sort((a, b) => H.parse(a.start) - H.parse(b.start));
+    let slams = withRounds.filter(s => H.daysUntil(s.end) >= -45).slice(0, 3);
+    if (!slams.length) slams = withRounds.slice(-3);
     if (!scheduleSel || !slams.some(s => s.id === scheduleSel)) scheduleSel = H.nextSlam(slams).id;
     const slam = slams.find(s => s.id === scheduleSel) || slams[0];
     const bcasts = slam.broadcasters.map(k => T.BROADCASTERS[k]);
@@ -391,7 +396,8 @@
         el('div', { class: 'tourney-head__venue' }, slam.venue + ' · ' + slam.city),
         el('div', { class: 'tourney-head__meta' },
           el('span', null, ic('calendar', { size: 14 }), H.fmtRange(slam.start, slam.end)),
-          el('span', null, el('span', { class: 'surface-dot' }), slam.surfaceLabel))),
+          el('span', null, el('span', { class: 'surface-dot' }), slam.surfaceLabel),
+          slam.provisional ? el('span', { class: 'provisional-tag' }, 'Termin vorläufig') : null)),
       el('div', { class: 'broadcast-line' },
         el('span', { class: 'broadcast-line__label' }, ic('tv', { size: 16 }), 'Live bei'),
         bcasts.map(b => broadcastTag(b, false))),

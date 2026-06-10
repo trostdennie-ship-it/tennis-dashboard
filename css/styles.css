@@ -376,6 +376,13 @@ button { font-family: inherit; }
 .hero__meta span { display: inline-flex; align-items: center; gap: 5px; }
 .hero__meta .surface-dot { background: #fff; }
 
+/* „Termin vorläufig"-Markierung (z. B. 2028er Termine) */
+.provisional-tag {
+  display: inline-block; padding: 2px 8px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+  background: rgba(255, 255, 255, 0.24); color: #fff;
+}
+
 /* Datenhinweis-Banner */
 .data-banner {
   margin: 14px 20px 0;

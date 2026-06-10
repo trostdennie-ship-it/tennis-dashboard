@@ -10,6 +10,27 @@
      Namen, Punkte. Die Oberfläche aktualisiert sich automatisch.
    ================================================================= */
 (function () {
+  // Erzeugt den Standard-Runden-Spielplan eines Grand Slams aus Start- & Enddatum.
+  // (frühe Runden ab Start, Halbfinals/Finals ans Ende verankert – stimmt für alle vier Slams)
+  function slamRounds(start, end) {
+    const mk = (base, off) => {
+      const [y, m, d] = base.split('-').map(Number);
+      const x = new Date(y, m - 1, d + off);
+      return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, '0')}-${String(x.getDate()).padStart(2, '0')}`;
+    };
+    return [
+      { d: mk(start, 0), label: '1. Runde', note: 'Auftakt · Mo & Di' },
+      { d: mk(start, 2), label: '2. Runde', note: 'Mi & Do' },
+      { d: mk(start, 4), label: '3. Runde', note: 'Fr & Sa' },
+      { d: mk(start, 6), label: 'Achtelfinale', note: 'So & Mo' },
+      { d: mk(start, 8), label: 'Viertelfinale', note: 'Di & Mi' },
+      { d: mk(end, -3), label: 'Halbfinale Damen', note: 'Donnerstag' },
+      { d: mk(end, -2), label: 'Halbfinale Herren', note: 'Freitag' },
+      { d: mk(end, -1), label: 'Finale Damen', note: 'Samstag' },
+      { d: mk(end, 0), label: 'Finale Herren', note: 'Sonntag' },
+    ];
+  }
+
   // ── Übertragungs-Anbieter (Deutschland) ─────────────────────────
   // tone = Markenfarbe (für die kleine Pille), kind = Art, note = Hinweis
   const BROADCASTERS = {
@@ -94,6 +115,76 @@
         { d: '2027-01-31', label: 'Finale Herren', note: 'Rod Laver Arena · Sonntag' },
       ],
       favourites: ['Carlos Alcaraz', 'Jannik Sinner', 'Aryna Sabalenka', 'Iga Świątek'],
+    },
+
+    // ── Saison 2027 (offizielle Termine) ────────────────────────
+    {
+      id: 'rg27', name: 'French Open', city: 'Paris', venue: 'Stade Roland-Garros',
+      country: 'Frankreich', surface: 'clay', surfaceLabel: 'Sand',
+      start: '2027-05-24', end: '2027-06-06',
+      tz: 'Paris · gleiche Zeit wie Deutschland (MESZ)',
+      playNote: 'Tagsessions ab 11:00, Abendsession ab ca. 20:15 (deutsche Zeit).',
+      broadcasters: ['euro'],
+      rounds: slamRounds('2027-05-24', '2027-06-06'),
+    },
+    {
+      id: 'wim27', name: 'Wimbledon', city: 'London', venue: 'All England Lawn Tennis Club',
+      country: 'England', surface: 'grass', surfaceLabel: 'Rasen',
+      start: '2027-06-28', end: '2027-07-11',
+      tz: 'London · 1 Stunde hinter Deutschland',
+      playNote: 'Centre Court ab 14:30, Außenplätze ab 12:00 (deutsche Zeit).',
+      broadcasters: ['prime'],
+      rounds: slamRounds('2027-06-28', '2027-07-11'),
+    },
+    {
+      id: 'uso27', name: 'US Open', city: 'New York', venue: 'USTA Billie Jean King Center',
+      country: 'USA', surface: 'hard', surfaceLabel: 'Hartplatz',
+      start: '2027-08-30', end: '2027-09-12',
+      tz: 'New York · 6 Stunden hinter Deutschland',
+      playNote: 'Tagsession ab 17:00, Nightsession ab ca. 01:00 (deutsche Zeit).',
+      broadcasters: ['sky', 'sdtv'],
+      rounds: slamRounds('2027-08-30', '2027-09-12'),
+    },
+
+    // ── Saison 2028 ─────────────────────────────────────────────
+    // Olympia-Jahr (LA, Juli 2028) → Kalender verschoben.
+    // Wimbledon ist offiziell bestätigt; die übrigen Termine sind
+    // VORLÄUFIG (provisional) – bitte vor der Saison 2028 prüfen.
+    {
+      id: 'ao28', name: 'Australian Open', city: 'Melbourne', venue: 'Melbourne Park',
+      country: 'Australien', surface: 'hard', surfaceLabel: 'Hartplatz',
+      start: '2028-01-17', end: '2028-01-30', provisional: true,
+      tz: 'Melbourne · 9–10 Stunden vor Deutschland',
+      playNote: 'Spiele oft schon ab 01:00 vormittags (deutsche Zeit).',
+      broadcasters: ['euro'],
+      rounds: slamRounds('2028-01-17', '2028-01-30'),
+    },
+    {
+      id: 'rg28', name: 'French Open', city: 'Paris', venue: 'Stade Roland-Garros',
+      country: 'Frankreich', surface: 'clay', surfaceLabel: 'Sand',
+      start: '2028-05-22', end: '2028-06-04', provisional: true,
+      tz: 'Paris · gleiche Zeit wie Deutschland (MESZ)',
+      playNote: 'Tagsessions ab 11:00, Abendsession ab ca. 20:15 (deutsche Zeit).',
+      broadcasters: ['euro'],
+      rounds: slamRounds('2028-05-22', '2028-06-04'),
+    },
+    {
+      id: 'wim28', name: 'Wimbledon', city: 'London', venue: 'All England Lawn Tennis Club',
+      country: 'England', surface: 'grass', surfaceLabel: 'Rasen',
+      start: '2028-07-03', end: '2028-07-16',
+      tz: 'London · 1 Stunde hinter Deutschland',
+      playNote: 'Wegen der Olympischen Spiele 2028 später als üblich. Centre Court ab 14:30 (deutsche Zeit).',
+      broadcasters: ['prime'],
+      rounds: slamRounds('2028-07-03', '2028-07-16'),
+    },
+    {
+      id: 'uso28', name: 'US Open', city: 'New York', venue: 'USTA Billie Jean King Center',
+      country: 'USA', surface: 'hard', surfaceLabel: 'Hartplatz',
+      start: '2028-08-28', end: '2028-09-10', provisional: true,
+      tz: 'New York · 6 Stunden hinter Deutschland',
+      playNote: 'Tagsession ab 17:00, Nightsession ab ca. 01:00 (deutsche Zeit).',
+      broadcasters: ['sky', 'sdtv'],
+      rounds: slamRounds('2028-08-28', '2028-09-10'),
     },
   ];
 
