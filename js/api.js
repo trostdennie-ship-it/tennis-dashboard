@@ -40,6 +40,7 @@
   // Durchsuchbare Spieler-Datenbank (für Suche & Verfolgen)
   let playerDB = null;        // { updated, players:[], byId:Map }
   let playerDBError = null;
+  let resultsDB = null;       // { updated, results: {id:[matches]} }
 
   const subs = new Set();
   function notify() { subs.forEach(fn => { try { fn(status()); } catch (e) {} }); }
@@ -151,6 +152,18 @@
     return { loaded: !!playerDB, error: playerDBError, count: playerDB ? playerDB.players.length : 0 };
   }
 
+  // ── Jüngste Match-Ergebnisse (lazy geladen) ───────────────────
+  async function loadResults() {
+    if (resultsDB) return resultsDB;
+    try {
+      const d = await fetchJSON('data/recent-results.json', 12000);
+      if (d && d.results) { resultsDB = d; notify(); }
+    } catch (e) { /* still: App läuft auch ohne Ergebnisse */ }
+    return resultsDB;
+  }
+  function getResults(id) { return resultsDB ? (resultsDB.results[id] || null) : null; }
+  function resultsUpdated() { return resultsDB ? resultsDB.updated : null; }
+
   // Relative Zeitangabe „vor X" (deutsch)
   function timeAgo(date) {
     if (!date) return null;
@@ -177,5 +190,9 @@
     youngRisers,
     getPlayerById,
     playerDBStatus,
+    // Jüngste Ergebnisse
+    loadResults,
+    getResults,
+    resultsUpdated,
   };
 })();

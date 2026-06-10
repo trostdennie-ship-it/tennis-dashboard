@@ -30,11 +30,13 @@ const SOURCES = {
     label: 'ATP Herren',
     rankings: 'https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/atp_rankings_current.csv',
     players:  'https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/atp_players.csv',
+    matches:  'https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/atp_matches_2026.csv',
   },
   wta: {
     label: 'WTA Damen',
     rankings: 'https://raw.githubusercontent.com/JeffSackmann/tennis_wta/master/wta_rankings_current.csv',
     players:  'https://raw.githubusercontent.com/JeffSackmann/tennis_wta/master/wta_players.csv',
+    matches:  'https://raw.githubusercontent.com/JeffSackmann/tennis_wta/master/wta_matches_2026.csv',
   },
 };
 
@@ -170,12 +172,48 @@ async function buildTour(key) {
   };
 }
 
+// ── Jüngste Match-Ergebnisse je Spieler ───────────────────────
+const RESULTS_N = 3;       // so viele letzte Matches je Spieler
+const ROUND_ORDER = { F: 8, BR: 7, SF: 6, QF: 5, R16: 4, RR: 4, R32: 3, R64: 2, R128: 1 };
+
+async function buildResults(key, search) {
+  const src = SOURCES[key];
+  let rows;
+  try { rows = parseCSV(await fetchText(src.matches)); }
+  catch (e) { console.error(`  ⚠ ${key} Match-Daten nicht ladbar: ${e.message}`); return { results: {}, lastDate: null }; }
+  if (!rows.length) return { results: {}, lastDate: null };
+
+  const want = new Set(search.map(p => p.id.split('-')[1]));   // rohe player_ids
+  const byPlayer = {};
+  for (const r of rows) {
+    [['winner', 'loser'], ['loser', 'winner']].forEach(([me, opp]) => {
+      const pid = r[me + '_id'];
+      if (!pid || !want.has(pid)) return;
+      (byPlayer[pid] = byPlayer[pid] || []).push({
+        d: r.tourney_date, t: (r.tourney_name || '').trim(), s: r.surface || '',
+        r: r.round || '', o: fixName((r[opp + '_name'] || '').trim()),
+        w: me === 'winner' ? 1 : 0, sc: (r.score || '').trim(),
+      });
+    });
+  }
+  const sortKey = (m) => (m.d || '') + String(ROUND_ORDER[m.r] || 0).padStart(2, '0');
+  const results = {};
+  let lastDate = null;
+  for (const pid in byPlayer) {
+    const arr = byPlayer[pid].sort((a, b) => sortKey(b).localeCompare(sortKey(a))).slice(0, RESULTS_N);
+    if (arr.length) { results[`${key}-${pid}`] = arr; if (!lastDate || arr[0].d > lastDate) lastDate = arr[0].d; }
+  }
+  return { results, lastDate };
+}
+
 // ── Hauptlauf ─────────────────────────────────────────────────
 async function main() {
   await mkdir(DATA_DIR, { recursive: true });
   let ok = 0;
   let searchPlayers = [];
   let searchUpdated = null;
+  let allResults = {};
+  let resultsDate = null;
   for (const key of Object.keys(SOURCES)) {
     try {
       const data = await buildTour(key);
@@ -185,6 +223,11 @@ async function main() {
       searchUpdated = data.updated;
       console.log(`✓ ${key.toUpperCase()}: Top ${data.list.length} + Such-DB ${search.length}, Stand ${data.updated}, #1 ${data.list[0]?.name}`);
       ok++;
+      // Jüngste Match-Ergebnisse (für die verfolgbaren Spieler)
+      const { results, lastDate } = await buildResults(key, search);
+      allResults = Object.assign(allResults, results);
+      if (lastDate && (!resultsDate || lastDate > resultsDate)) resultsDate = lastDate;
+      console.log(`  ↳ Ergebnisse für ${Object.keys(results).length} Spieler:innen (Stand ${lastDate || '—'})`);
     } catch (e) {
       console.error(`✗ ${key.toUpperCase()} fehlgeschlagen: ${e.message} – alte Datei bleibt erhalten.`);
     }
@@ -197,6 +240,15 @@ async function main() {
       'utf8'
     );
     console.log(`✓ Such-Datenbank: ${searchPlayers.length} Spieler:innen`);
+  }
+  // Jüngste Ergebnisse
+  if (Object.keys(allResults).length) {
+    await writeFile(
+      join(DATA_DIR, 'recent-results.json'),
+      JSON.stringify({ updated: resultsDate ? fmtDate(resultsDate) : null, results: allResults }) + '\n',
+      'utf8'
+    );
+    console.log(`✓ Jüngste Ergebnisse: ${Object.keys(allResults).length} Spieler:innen, Stand ${resultsDate ? fmtDate(resultsDate) : '—'}`);
   }
   if (!ok) { console.error('Keine Tour aktualisiert.'); process.exit(1); }
 }

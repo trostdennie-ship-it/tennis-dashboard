@@ -189,13 +189,20 @@
       )
     );
 
+    // Diagonales „BEISPIELDATEN"-Wasserzeichen über den Match-Karten
+    const watermark = el('div', { class: 'live-watermark', 'aria-hidden': 'true' },
+      el('div', { class: 'live-watermark__inner' },
+        Array.from({ length: 22 }, () => el('div', { class: 'live-watermark__row' }, 'Beispieldaten · keine echten Spiele · '))));
+    const listWrap = el('div', { class: 'live-list-wrap' }, listEl, watermark);
+
     const body = el('div', { class: 'screen' },
       el('div', { style: 'padding:4px 20px 0' },
         el('div', { class: 'live-intro' },
-          el('strong', null, 'Beispiel-Spiele'),
-          ' zur Veranschaulichung. Während der Grand Slams erscheinen hier die echten Begegnungen mit live tickenden Ständen.'),
-        listEl,
-        el('div', { class: 'foot-note' }, '● = Aufschlag · Sätze, Spiele und Punkte aktualisieren sich automatisch.')
+          el('div', { class: 'live-intro__badge' }, '⚠️ Beispieldaten'),
+          el('span', null, 'Das sind ', el('strong', null, 'keine echten Spiele'),
+            ' – nur zur Veranschaulichung. Während eines Grand Slams stehen hier die echten Begegnungen mit live tickenden Ständen.')),
+        listWrap,
+        el('div', { class: 'foot-note' }, '● = Aufschlag · Sätze, Spiele und Punkte aktualisieren sich automatisch (simuliert).')
       )
     );
 

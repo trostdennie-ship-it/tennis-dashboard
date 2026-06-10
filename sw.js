@@ -13,7 +13,7 @@
    ▸ Wenn du Dateien änderst: erhöhe CACHE_VERSION, damit alte Caches
      verworfen werden.
    ================================================================= */
-const CACHE_VERSION = 'aufschlag-v3';
+const CACHE_VERSION = 'aufschlag-v4';
 const CORE = [
   './',
   './index.html',

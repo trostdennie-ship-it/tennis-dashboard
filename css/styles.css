@@ -406,6 +406,24 @@ button { font-family: inherit; }
   white-space: nowrap;
 }
 
+/* „So funktioniert die App"-Kästchen */
+.help-card {
+  background: var(--surface); border-radius: var(--radius); padding: 16px;
+  box-shadow: var(--card-shadow); border: 1px solid var(--card-border);
+  border-left: 4px solid var(--accent);
+}
+.help-card__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.help-card__title { font-weight: 800; font-size: 16px; color: var(--ink); }
+.help-card__close { background: none; border: none; cursor: pointer; color: var(--ink-faint); padding: 2px; display: flex; }
+.help-card__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.help-item { display: flex; align-items: flex-start; gap: 11px; font-size: 13.5px; color: var(--ink-soft); line-height: 1.4; }
+.help-item__icon { color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+.help-item strong { color: var(--ink); font-weight: 700; }
+.help-card__ok {
+  margin-top: 15px; width: 100%; padding: 12px; border-radius: 12px; border: none; cursor: pointer;
+  background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 14px;
+}
+
 /* =================================================================
    HEUTE — Listen & Karten
    ================================================================= */
@@ -658,6 +676,24 @@ button { font-family: inherit; }
 }
 .player__wiki:hover { text-decoration: underline; }
 
+/* Letzte Match-Ergebnisse (bei verfolgten Spielern) */
+.results { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+.results__head {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink-faint); font-weight: 600; margin-bottom: 8px;
+}
+.result-row { display: flex; align-items: flex-start; gap: 10px; padding: 4px 0; }
+.result-badge {
+  flex-shrink: 0; width: 22px; height: 22px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-weight: 700; font-size: 12px;
+}
+.result-badge.is-win { background: rgba(31, 122, 77, 0.15); color: var(--move-up); }
+.result-badge.is-loss { background: rgba(192, 86, 60, 0.14); color: var(--move-down); }
+.result-main { flex: 1; min-width: 0; }
+.result-opp { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.result-meta { font-size: 12px; color: var(--ink-soft); margin-top: 1px; line-height: 1.35; }
+
 /* =================================================================
    LIVETICKER
    ================================================================= */
@@ -668,11 +704,37 @@ button { font-family: inherit; }
 .live-dot--anim { animation: livePulse 1.4s ease-in-out infinite; }
 @keyframes livePulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.7); } 100% { opacity: 1; transform: scale(1); } }
 
+/* Auffälliger Warnhinweis (rötlich) statt dezent-grün */
 .live-intro {
-  padding: 11px 14px; border-radius: 12px; background: var(--accent-soft);
-  font-size: 12.5px; color: var(--accent-soft-ink); line-height: 1.45; margin-bottom: 14px;
+  padding: 12px 14px; border-radius: 12px;
+  background: rgba(210, 72, 59, 0.12); border: 1.5px solid rgba(210, 72, 59, 0.4);
+  font-size: 13px; color: var(--ink); line-height: 1.45; margin-bottom: 14px;
 }
+.live-intro__badge {
+  display: flex; align-items: center; gap: 6px;
+  font-weight: 800; font-size: 13px; color: #d2483b; margin-bottom: 4px;
+  letter-spacing: 0.02em; text-transform: uppercase;
+}
+
+/* Diagonales „BEISPIELDATEN"-Wasserzeichen über den Match-Karten */
+.live-list-wrap { position: relative; }
 .live-list { display: flex; flex-direction: column; gap: 12px; }
+.live-watermark {
+  position: absolute; inset: 0; z-index: 4; pointer-events: none; overflow: hidden;
+  border-radius: var(--radius);
+}
+.live-watermark__inner {
+  position: absolute; top: 50%; left: 50%; width: 160%;
+  transform: translate(-50%, -50%) rotate(-26deg);
+  display: flex; flex-direction: column; gap: 16px;
+  opacity: 0.14;
+}
+.live-watermark__row {
+  text-align: center; white-space: nowrap;
+  font-family: var(--font-mono); font-weight: 700; font-size: 20px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink);
+}
+[data-theme="dark"] .live-watermark__inner { opacity: 0.18; }
 
 .match__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; gap: 8px; }
 .match__meta { font-size: 12px; color: var(--ink-soft); }

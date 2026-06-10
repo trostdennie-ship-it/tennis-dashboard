@@ -96,13 +96,13 @@
   }
   // DB-Spieler → Anzeige-Objekt
   function displayDB(p) {
-    return { id: p.id, name: p.name, country: p.country, age: p.age, rank: p.rank, move: p.move,
+    return { id: p.id, dbId: p.id, name: p.name, country: p.country, age: p.age, rank: p.rank, move: p.move,
              tour: p.tour, wd: p.wd, initials: H.initialsOf(p.name), curated: false };
   }
   // kuratiertes Talent → Anzeige-Objekt (mit Live-Daten, falls DB geladen)
   function displayCurated(c) {
     const live = dbByName(c.name);
-    return { id: c.id, name: c.name, country: c.country, age: c.age,
+    return { id: c.id, dbId: live ? live.id : null, name: c.name, country: c.country, age: c.age,
              rank: live ? live.rank : c.rank, move: live ? live.move : null,
              tour: c.tour, wd: live ? live.wd : null, tag: c.tag, note: c.note,
              initials: c.initials, curated: true };
@@ -114,7 +114,7 @@
     const live = window.TennisData.getPlayerById(id);
     if (live) return displayDB(live);
     const m = trackedMeta()[id];
-    if (m && m.name) return { id, name: m.name, country: m.country, age: m.age, rank: m.rank, move: null,
+    if (m && m.name) return { id, dbId: id, name: m.name, country: m.country, age: m.age, rank: m.rank, move: null,
                               tour: m.tour, wd: m.wd, initials: H.initialsOf(m.name), curated: false };
     return null;
   }
@@ -159,6 +159,27 @@
 
   function settingsBtn() {
     return el('button', { class: 'icon-btn', 'aria-label': 'Einstellungen', onClick: openSettings }, ic('gear', { size: 22 }));
+  }
+
+  // ── „So funktioniert die App"-Kästchen (einmalig, dann ausblendbar) ──
+  function dismissHelp() { settings.helpDismissed = true; saveSettings(); rerender(false); }
+  function helpItem(icon, ...content) {
+    return el('li', { class: 'help-item' }, ic(icon, { size: 18 }, 'help-item__icon'), el('span', null, content));
+  }
+  function helpCard() {
+    if (settings.helpDismissed) return null;
+    return el('div', { class: 'section', style: 'margin-top:18px' },
+      el('div', { class: 'help-card' },
+        el('div', { class: 'help-card__head' },
+          el('span', { class: 'help-card__title' }, '👋 So funktioniert deine App'),
+          el('button', { class: 'help-card__close', 'aria-label': 'Schließen', onClick: dismissHelp }, ic('x', { size: 18 }))),
+        el('ul', { class: 'help-card__list' },
+          helpItem('today', el('strong', null, 'Heute'), ' – nächstes Grand Slam, wo es läuft & deine Talente'),
+          helpItem('live', el('strong', null, 'Live'), ' – Spielstände (Beispiel, gerade kein Turnier aktiv)'),
+          helpItem('ranking', el('strong', null, 'Rangliste'), ' – ATP & WTA, jede Nacht aktualisiert'),
+          helpItem('schedule', el('strong', null, 'Spielplan'), ' – Termine & Runden der vier Grand Slams'),
+          helpItem('players', el('strong', null, 'Talente'), ' – ✨ neu: Spieler:innen ', el('strong', null, 'suchen, verfolgen'), ' & letzte Ergebnisse sehen')),
+        el('button', { class: 'help-card__ok', onClick: dismissHelp }, 'Verstanden')));
   }
 
   // ── HERO (nächstes Turnier) ───────────────────────────────────
@@ -255,7 +276,7 @@
           el('div', { class: 'slam-row__date' }, H.fmtDate(s.start)),
           ic('chevron', { size: 16 }, 'slam-row__chev'))))) : null;
 
-    return screenWrap(head, hero(next), dataBanner(), watch, preview, talentsSec, finishedSec, moreSec);
+    return screenWrap(head, hero(next), dataBanner(), helpCard(), watch, preview, talentsSec, finishedSec, moreSec);
   }
 
   function dateRow(r, isFinal) {
@@ -427,7 +448,7 @@
         const mine = featured.map(displayTracked).filter(Boolean);
         results.append(label('Meine Talente'));
         if (!mine.length) results.append(hintCard('Noch niemand verfolgt. Such oben nach einem Namen oder wähle unten ein Talent aus.'));
-        else mine.forEach(p => results.append(playerRow(p, rebuild)));
+        else mine.forEach(p => results.append(playerRow(p, rebuild, true)));
         const risers = window.TennisData.youngRisers(150, 10).filter(p => !isTracked(p.id));
         if (risers.length) { results.append(label('Junge Aufsteiger', 'section-gap')); rowsFor(risers, displayDB); }
         const recs = T.PLAYERS.filter(p => !isTracked(p.id));
@@ -437,6 +458,7 @@
 
     input.addEventListener('input', rebuild);
     window.TennisData.loadPlayerDB().then(() => { if (!input.value.trim()) rebuild(); });
+    window.TennisData.loadResults().then(() => { if (!input.value.trim()) rebuild(); });
 
     const head = el('div', { class: 'screen-head' },
       el('div', { class: 'screen-head__row' },
@@ -448,7 +470,7 @@
 
     const body = el('div', { class: 'players-body' }, results,
       el('div', { class: 'foot-note', style: 'margin:16px 0 4px' },
-        'Rang & Alter tagesaktuell · „Mehr erfahren" öffnet Wikipedia. Quelle: Jeff Sackmann.'));
+        'Rang & Alter tagesaktuell · Match-Ergebnisse können ein paar Tage verzögert sein · „Mehr erfahren" öffnet Wikipedia · Quelle: Jeff Sackmann.'));
 
     rebuild();
     return screenWrap(head, body);
@@ -458,10 +480,27 @@
     return el('div', { class: 'card', style: 'color:var(--ink-soft);font-size:13.5px;line-height:1.45' }, text);
   }
 
-  // Einheitliche Spielerzeile (kuratiert oder gesucht), mit +/✓-Knopf
-  function playerRow(p, onChange) {
+  const ROUND_DE = {
+    F: 'Finale', BR: 'Spiel um Platz 3', SF: 'Halbfinale', QF: 'Viertelfinale',
+    R16: 'Achtelfinale', R32: '3. Runde', R64: '2. Runde', R128: '1. Runde',
+    RR: 'Gruppenphase', Q1: 'Quali', Q2: 'Quali', Q3: 'Quali', ER: 'Runde',
+  };
+  function resultsBlock(matches) {
+    return el('div', { class: 'results' },
+      el('div', { class: 'results__head' }, 'Letzte Spiele'),
+      matches.map(m => el('div', { class: 'result-row' },
+        el('span', { class: 'result-badge ' + (m.w ? 'is-win' : 'is-loss') }, m.w ? 'S' : 'N'),
+        el('div', { class: 'result-main' },
+          el('div', { class: 'result-opp' }, (m.w ? 'Sieg gegen ' : 'Niederlage gegen ') + m.o),
+          el('div', { class: 'result-meta' }, [m.t, ROUND_DE[m.r] || m.r, m.sc].filter(Boolean).join(' · '))))));
+  }
+
+  // Einheitliche Spielerzeile (kuratiert oder gesucht), mit +/✓-Knopf.
+  // showResults=true → bei verfolgten Spielern die letzten Match-Ergebnisse.
+  function playerRow(p, onChange, showResults) {
     const tracked = isTracked(p.id);
     const young = p.age != null && p.age <= T.NEXTGEN_MAX_AGE;
+    const results = showResults ? window.TennisData.getResults(p.dbId || p.id) : null;
     return el('div', { class: 'card player' },
       el('div', { class: 'player__top' },
         avatar(p.initials, { size: 48, accent: tracked }),
@@ -483,6 +522,7 @@
           onClick: () => { toggleTrack(p); if (onChange) onChange(); },
         }, ic(tracked ? 'check' : 'plus', { size: 20, sw: 2.2 }))),
       p.note ? el('div', { class: 'player__note' }, p.note) : null,
+      (results && results.length) ? resultsBlock(results) : null,
       el('a', { class: 'player__wiki', href: wikiLink(p), target: '_blank', rel: 'noopener' },
         ic('globe', { size: 14 }), 'Mehr erfahren'));
   }
@@ -600,6 +640,13 @@
         el('div', { class: 'data-status' }, sheetState.statusText, sheetState.refreshBtn),
         el('div', { class: 'sheet__hint' },
           'Rangliste ATP & WTA – täglich automatisch aktualisiert, kostenlos & ohne Anmeldung (Quelle: Jeff Sackmann / GitHub). Turniertermine & Talente sind gepflegt.')),
+
+      el('div', { class: 'sheet__group' },
+        el('div', { class: 'sheet__legend' }, label('Hilfe')),
+        el('button', {
+          class: 'data-status__btn', style: 'width:100%;justify-content:center',
+          onClick: () => { settings.helpDismissed = false; saveSettings(); closeSettings(); activeTab = 'today'; rerender(true); },
+        }, ic('today', { size: 15 }), 'Anleitung „So funktioniert die App" anzeigen')),
 
       el('div', { class: 'sheet__group' },
         el('div', { class: 'sheet__legend' }, label('Aufs iPhone')),
