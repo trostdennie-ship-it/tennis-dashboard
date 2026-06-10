@@ -604,7 +604,11 @@ button { font-family: inherit; }
 /* =================================================================
    TALENTE
    ================================================================= */
-.player-list { padding: 8px 20px 0; display: flex; flex-direction: column; gap: 12px; }
+.players-body { padding: 8px 20px 0; }
+.player-list { display: flex; flex-direction: column; gap: 12px; }
+.player-list > .label { margin: 18px 2px 0; }
+.player-list > .label:first-child { margin-top: 2px; }
+.player-list > .label.section-gap { margin-top: 26px; }
 .player { }
 .player__top { display: flex; gap: 14px; align-items: flex-start; }
 .player__main { flex: 1; min-width: 0; }
@@ -621,6 +625,38 @@ button { font-family: inherit; }
 }
 .star-btn { background: none; border: none; cursor: pointer; padding: 4px; flex-shrink: 0; color: var(--ink-faint); }
 .star-btn.is-fav { color: var(--accent); }
+
+/* Suchfeld */
+.search-wrap {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 14px; padding: 0 14px;
+  background: var(--surface); border-radius: 14px;
+  box-shadow: var(--card-shadow); border: 1px solid var(--card-border);
+}
+.search-icon { color: var(--ink-faint); display: flex; flex-shrink: 0; }
+.search-input {
+  flex: 1; border: none; outline: none; background: transparent;
+  font-family: var(--font-body); font-size: 16px; color: var(--ink);
+  padding: 13px 0; min-width: 0;
+}
+.search-input::placeholder { color: var(--ink-faint); }
+.search-input::-webkit-search-cancel-button { -webkit-appearance: none; }
+
+/* Verfolgen-Knopf (+ / ✓) */
+.track-btn {
+  flex-shrink: 0; width: 38px; height: 38px; border-radius: 999px; cursor: pointer;
+  border: 1.5px solid var(--line); background: var(--surface); color: var(--ink-soft);
+  display: flex; align-items: center; justify-content: center;
+}
+.track-btn.is-on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+/* „Mehr erfahren"-Link (Wikipedia) */
+.player__wiki {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 12px; font-size: 12.5px; font-weight: 600;
+  color: var(--accent); text-decoration: none;
+}
+.player__wiki:hover { text-decoration: underline; }
 
 /* =================================================================
    LIVETICKER

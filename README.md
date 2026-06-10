@@ -5,7 +5,7 @@ leidenschaftlichen Tennisfan. Auf einen Blick zeigt sie:
 
 - **Nächstes Grand Slam** mit Countdown, Ort, Belag und **wo es in Deutschland läuft**
 - **Weltrangliste** (ATP Herren **und** WTA Damen) – **täglich automatisch aktualisiert**, deutsche Spieler:innen 🇩🇪 hervorgehoben
-- **Junge Talente / NextGen** zum Verfolgen (Herren & Damen)
+- **Talente suchen & verfolgen** – beliebige Spieler:innen über ein Suchfeld finden und „verfolgen", mit tagesaktuellem Rang, Form (↑/↓), Alter und „Mehr erfahren"-Link zur Wikipedia
 - **Spielplan** der vier Grand Slams mit Runden, Zeitzone und Anstoßzeiten
 - **Liveticker** mit tickenden Satz-, Spiel- und Punkteständen (Demo, siehe Hinweis unten)
 

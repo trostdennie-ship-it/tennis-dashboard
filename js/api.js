@@ -37,6 +37,10 @@
     error: null,
   };
 
+  // Durchsuchbare Spieler-Datenbank (für Suche & Verfolgen)
+  let playerDB = null;        // { updated, players:[], byId:Map }
+  let playerDBError = null;
+
   const subs = new Set();
   function notify() { subs.forEach(fn => { try { fn(status()); } catch (e) {} }); }
   function status() {
@@ -107,7 +111,44 @@
     }
     // 2) Immer frisch versuchen (kostenlos, kein Schlüssel)
     load();
+    loadPlayerDB();   // Spieler-Such-DB im Hintergrund laden (klein)
     notify();
+  }
+
+  // ── Spieler-Datenbank (Suche & Verfolgen) ─────────────────────
+  async function loadPlayerDB() {
+    if (playerDB) return playerDB;
+    try {
+      const d = await fetchJSON('data/players-search.json', 12000);
+      if (d && Array.isArray(d.players) && d.players.length) {
+        playerDB = { updated: d.updated, players: d.players, byId: new Map(d.players.map(p => [p.id, p])) };
+        playerDBError = null;
+        notify();
+      }
+    } catch (e) { playerDBError = (e && e.message) || 'Fehler'; }
+    return playerDB;
+  }
+  // diakritik-unempfindlich: "João" == "Joao", "Świątek" == "Swiatek"
+  function norm(s) { return (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+  function searchPlayers(q, limit = 14) {
+    if (!playerDB) return [];
+    const nq = norm(String(q).trim());
+    if (!nq) return [];
+    return playerDB.players
+      .filter(p => norm(p.name).includes(nq))
+      .sort((a, b) => a.rank - b.rank)
+      .slice(0, limit);
+  }
+  function youngRisers(maxRank = 150, limit = 12) {
+    if (!playerDB) return [];
+    return playerDB.players
+      .filter(p => p.rank <= maxRank && p.age)
+      .sort((a, b) => (a.age - b.age) || (a.rank - b.rank))
+      .slice(0, limit);
+  }
+  function getPlayerById(id) { return playerDB ? playerDB.byId.get(id) || null : null; }
+  function playerDBStatus() {
+    return { loaded: !!playerDB, error: playerDBError, count: playerDB ? playerDB.players.length : 0 };
   }
 
   // Relative Zeitangabe „vor X" (deutsch)
@@ -130,5 +171,11 @@
     timeAgo,
     subscribe(fn) { subs.add(fn); return () => subs.delete(fn); },
     getRankings(tour) { return state.rankings[tour] || demoFor(tour); },
+    // Spieler-Suche & Verfolgen
+    loadPlayerDB,
+    searchPlayers,
+    youngRisers,
+    getPlayerById,
+    playerDBStatus,
   };
 })();

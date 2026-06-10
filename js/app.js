@@ -68,6 +68,57 @@
   }
   function fontLabel() { return Object.keys(FONT_MAP).find(k => FONT_MAP[k] === (settings.fontScale || 1)) || 'Normal'; }
 
+  // ── Talente verfolgen (kuratiert + selbst gesucht) ────────────
+  function trackedMeta() { return settings.trackedMeta || (settings.trackedMeta = {}); }
+  function isTracked(id) { return featured.includes(id); }
+  function track(p) {
+    if (!featured.includes(p.id)) featured = featured.concat(p.id);
+    if (!T.PLAYERS.some(c => c.id === p.id)) {  // selbst gesuchter Spieler → Basisdaten merken
+      trackedMeta()[p.id] = { name: p.name, country: p.country, tour: p.tour, age: p.age || null, wd: p.wd || null, rank: p.rank || null };
+    }
+    saveSettings();
+  }
+  function untrack(id) {
+    featured = featured.filter(x => x !== id);
+    if (settings.trackedMeta) delete settings.trackedMeta[id];
+    saveSettings();
+  }
+  function toggleTrack(p) { isTracked(p.id) ? untrack(p.id) : track(p); }
+
+  const normName = (s) => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  function dbByName(name) {
+    const hits = window.TennisData.searchPlayers(name, 6);
+    return hits.find(h => normName(h.name) === normName(name)) || null;
+  }
+  function wikiLink(p) {
+    if (p.wd) return 'https://www.wikidata.org/wiki/Special:GoToLinkedPage/dewiki/' + p.wd;
+    return 'https://de.wikipedia.org/w/index.php?search=' + encodeURIComponent(p.name + ' Tennis');
+  }
+  // DB-Spieler → Anzeige-Objekt
+  function displayDB(p) {
+    return { id: p.id, name: p.name, country: p.country, age: p.age, rank: p.rank, move: p.move,
+             tour: p.tour, wd: p.wd, initials: H.initialsOf(p.name), curated: false };
+  }
+  // kuratiertes Talent → Anzeige-Objekt (mit Live-Daten, falls DB geladen)
+  function displayCurated(c) {
+    const live = dbByName(c.name);
+    return { id: c.id, name: c.name, country: c.country, age: c.age,
+             rank: live ? live.rank : c.rank, move: live ? live.move : null,
+             tour: c.tour, wd: live ? live.wd : null, tag: c.tag, note: c.note,
+             initials: c.initials, curated: true };
+  }
+  // verfolgte ID → Anzeige-Objekt
+  function displayTracked(id) {
+    const c = T.PLAYERS.find(p => p.id === id);
+    if (c) return displayCurated(c);
+    const live = window.TennisData.getPlayerById(id);
+    if (live) return displayDB(live);
+    const m = trackedMeta()[id];
+    if (m && m.name) return { id, name: m.name, country: m.country, age: m.age, rank: m.rank, move: null,
+                              tour: m.tour, wd: m.wd, initials: H.initialsOf(m.name), curated: false };
+    return null;
+  }
+
   // ── wiederkehrende Bausteine ──────────────────────────────────
   function label(text, extra) { return el('div', { class: 'label' + (extra ? ' ' + extra : '') }, text); }
 
@@ -149,7 +200,7 @@
     const next = H.nextSlam(slams);
     const bcasts = next.broadcasters.map(k => T.BROADCASTERS[k]);
     const finished = slams.find(s => s.done);
-    const talents = T.PLAYERS.filter(p => featured.includes(p.id));
+    const talents = featured.map(displayTracked).filter(Boolean);
     const upcoming = slams.filter(s => H.slamStatus(s) !== 'done' && s.id !== next.id);
     const firstRound = next.rounds && next.rounds[0];
     const final = next.rounds && next.rounds[next.rounds.length - 1];
@@ -175,12 +226,12 @@
       { action: 'Voller Spielplan', onAction: () => goto('schedule') },
       el('div', { class: 'card card--flush' }, [firstRound, final].map((r, i) => dateRow(r, i === 1)))) : null;
 
-    // Junge Talente
-    const talentsSec = section('Junge Talente', { action: 'Alle ansehen', onAction: () => goto('players') },
+    // Meine Talente (verfolgte Spieler:innen)
+    const talentsSec = section('Meine Talente', { action: 'Suchen & verwalten', onAction: () => goto('players') },
       talents.length
         ? el('div', { class: 'talent-scroll' }, talents.map(talentCard))
         : el('div', { class: 'card', style: 'color:var(--ink-soft);font-size:13.5px;line-height:1.45' },
-            'Noch keine Talente ausgewählt. Tippe unten auf „Talente" und markiere welche mit ★ – sie erscheinen dann hier.'));
+            'Noch niemand verfolgt. Tippe unten auf „Talente" und such dir Spieler:innen aus – sie erscheinen dann hier.'));
 
     // Gerade beendet
     const finishedSec = finished ? section('Gerade beendet', null,
@@ -223,13 +274,13 @@
   function talentCard(p) {
     return el('div', { class: 'card card--tap talent-card', style: 'padding:14px', onClick: () => goto('players') },
       el('div', { class: 'talent-card__top' },
-        avatar(p.initials, { size: 42 }),
-        el('span', { class: 'talent-card__rank' }, '#' + p.rank)),
+        avatar(p.initials, { size: 42, accent: true }),
+        p.rank ? el('span', { class: 'talent-card__rank' }, '#' + p.rank) : null),
       el('div', { class: 'talent-card__name' }, p.name),
       el('div', { class: 'talent-card__meta' },
         countryBadge(p.country), flagDE(p.country),
-        el('span', { class: 'talent-card__age' }, p.age + ' Jahre')),
-      el('div', { class: 'talent-card__tag' }, p.tag));
+        p.age ? el('span', { class: 'talent-card__age' }, p.age + ' J.') : null),
+      el('div', { class: 'talent-card__tag' }, p.tag || (p.move > 0 ? '↑ im Aufwind' : 'wird verfolgt')));
   }
 
   // ── 2 · WELTRANGLISTE (ATP & WTA) ─────────────────────────────
@@ -349,52 +400,91 @@
     return screenWrap(head, headerBlock, timeline);
   }
 
-  // ── 4 · TALENTE ───────────────────────────────────────────────
+  // ── 4 · TALENTE: suchen, verfolgen & sehen, was sie machen ────
   function playersScreen() {
-    const sorted = T.PLAYERS.slice().sort((a, b) => {
-      const fa = featured.includes(a.id), fb = featured.includes(b.id);
-      if (fa !== fb) return fa ? -1 : 1;
-      return a.rank - b.rank;
+    const input = el('input', {
+      class: 'search-input', type: 'search', placeholder: 'Spieler:in suchen …',
+      'aria-label': 'Spieler suchen', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false',
     });
+    const results = el('div', { class: 'player-list' });
+
+    function rowsFor(arr, mapFn) { arr.forEach(p => results.append(playerRow(mapFn(p), rebuild))); }
+
+    function rebuild() {
+      const q = input.value.trim();
+      results.innerHTML = '';
+      if (q) {
+        if (!window.TennisData.playerDBStatus().loaded) {
+          results.append(hintCard('Spielerdaten werden geladen …'));
+          window.TennisData.loadPlayerDB().then(() => { if (input.value.trim() === q) rebuild(); });
+          return;
+        }
+        const hits = window.TennisData.searchPlayers(q, 14);
+        results.append(label('Suchergebnisse'));
+        if (!hits.length) results.append(hintCard('Keine Spieler:in gefunden – versuch es mit dem Nachnamen.'));
+        else rowsFor(hits, displayDB);
+      } else {
+        const mine = featured.map(displayTracked).filter(Boolean);
+        results.append(label('Meine Talente'));
+        if (!mine.length) results.append(hintCard('Noch niemand verfolgt. Such oben nach einem Namen oder wähle unten ein Talent aus.'));
+        else mine.forEach(p => results.append(playerRow(p, rebuild)));
+        const risers = window.TennisData.youngRisers(150, 10).filter(p => !isTracked(p.id));
+        if (risers.length) { results.append(label('Junge Aufsteiger', 'section-gap')); rowsFor(risers, displayDB); }
+        const recs = T.PLAYERS.filter(p => !isTracked(p.id));
+        if (recs.length) { results.append(label('Empfohlene Talente', 'section-gap')); rowsFor(recs, displayCurated); }
+      }
+    }
+
+    input.addEventListener('input', rebuild);
+    window.TennisData.loadPlayerDB().then(() => { if (!input.value.trim()) rebuild(); });
 
     const head = el('div', { class: 'screen-head' },
       el('div', { class: 'screen-head__row' },
         el('div', null,
-          el('div', { class: 'screen-title' }, 'Junge Talente'),
-          el('div', { class: 'screen-sub' }, 'Tippe auf ★, um Favoriten aufs Dashboard zu holen')),
-        settingsBtn()));
+          el('div', { class: 'screen-title' }, 'Talente'),
+          el('div', { class: 'screen-sub' }, 'Suchen, verfolgen & sehen, was sie machen')),
+        settingsBtn()),
+      el('div', { class: 'search-wrap' }, ic('search', { size: 18 }, 'search-icon'), input));
 
-    const list = el('div', { class: 'player-list' },
-      sorted.map(playerCard),
-      el('div', { class: 'foot-note', style: 'margin:2px 0 4px' }, 'Alter & Platzierungen Stand Juni 2026 (Beispieldaten).'));
+    const body = el('div', { class: 'players-body' }, results,
+      el('div', { class: 'foot-note', style: 'margin:16px 0 4px' },
+        'Rang & Alter tagesaktuell · „Mehr erfahren" öffnet Wikipedia. Quelle: Jeff Sackmann.'));
 
-    return screenWrap(head, list);
+    rebuild();
+    return screenWrap(head, body);
   }
 
-  function playerCard(p) {
-    const fav = featured.includes(p.id);
+  function hintCard(text) {
+    return el('div', { class: 'card', style: 'color:var(--ink-soft);font-size:13.5px;line-height:1.45' }, text);
+  }
+
+  // Einheitliche Spielerzeile (kuratiert oder gesucht), mit +/✓-Knopf
+  function playerRow(p, onChange) {
+    const tracked = isTracked(p.id);
+    const young = p.age != null && p.age <= T.NEXTGEN_MAX_AGE;
     return el('div', { class: 'card player' },
       el('div', { class: 'player__top' },
-        avatar(p.initials, { size: 48, accent: fav }),
+        avatar(p.initials, { size: 48, accent: tracked }),
         el('div', { class: 'player__main' },
           el('div', { class: 'player__nameline' },
             el('span', { class: 'player__name' }, p.name),
             flagDE(p.country),
-            el('span', { class: 'player__rank' }, '#' + p.rank),
-            el('span', { class: 'player__tour' }, p.tour.toUpperCase())),
+            p.rank ? el('span', { class: 'player__rank' }, '#' + p.rank) : null,
+            p.tour ? el('span', { class: 'player__tour' }, p.tour.toUpperCase()) : null,
+            young ? el('span', { class: 'tag-young' }, 'JUNG') : null),
           el('div', { class: 'player__meta' },
             countryBadge(p.country),
-            el('span', { class: 'player__age' }, p.age + ' Jahre')),
-          el('div', { class: 'player__tag' }, p.tag)),
-        el('button', { class: 'star-btn' + (fav ? ' is-fav' : ''), 'aria-label': fav ? 'Favorit entfernen' : 'Als Favorit markieren', onClick: () => toggleFav(p.id) },
-          ic('star', { size: 24, sw: 1.7, filled: fav }))),
-      el('div', { class: 'player__note' }, p.note));
-  }
-
-  function toggleFav(id) {
-    featured = featured.includes(id) ? featured.filter(x => x !== id) : featured.concat(id);
-    saveSettings();
-    rerender();
+            p.age ? el('span', { class: 'player__age' }, p.age + ' Jahre') : null,
+            (p.move != null && p.move !== 0) ? moveBadge(p.move) : null),
+          p.tag ? el('div', { class: 'player__tag' }, p.tag) : null),
+        el('button', {
+          class: 'track-btn' + (tracked ? ' is-on' : ''),
+          'aria-label': tracked ? 'Nicht mehr verfolgen' : 'Verfolgen',
+          onClick: () => { toggleTrack(p); if (onChange) onChange(); },
+        }, ic(tracked ? 'check' : 'plus', { size: 20, sw: 2.2 }))),
+      p.note ? el('div', { class: 'player__note' }, p.note) : null,
+      el('a', { class: 'player__wiki', href: wikiLink(p), target: '_blank', rel: 'noopener' },
+        ic('globe', { size: 14 }), 'Mehr erfahren'));
   }
 
   // ── gemeinsame Hülle eines Screens (Kopf + scrollbarer Inhalt) ─

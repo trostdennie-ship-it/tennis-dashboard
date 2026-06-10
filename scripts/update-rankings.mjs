@@ -40,6 +40,7 @@ const SOURCES = {
 
 const TOP_N = 20;          // so viele Plätze in die Rangliste
 const GERMANS_N = 6;       // so viele Deutsche in „Deutsche im Feld"
+const SEARCH_N = 600;      // so viele Spieler je Tour in die Such-Datenbank
 
 // ── kleine Helfer ─────────────────────────────────────────────
 async function fetchText(url) {
@@ -141,12 +142,31 @@ async function buildTour(key) {
     .slice(0, GERMANS_N)
     .map(e => ({ rank: e.rank, name: e.name, country: 'GER' }));
 
+  // Durchsuchbare Spieler-Datenbank (Top SEARCH_N) – fürs Suchen & Verfolgen
+  const search = sorted.slice(0, SEARCH_N).map((r) => {
+    const p = players.get(r.player) || {};
+    const name = fixName(`${(p.name_first || '').trim()} ${(p.name_last || '').trim()}`.trim());
+    const prevRank = prevMap.get(r.player);
+    return {
+      id: `${key}-${r.player}`,           // stabile ID fürs Verfolgen
+      name: name || `#${r.player}`,
+      country: (p.ioc || '').toUpperCase().slice(0, 3),
+      age: ageFromDob(p.dob),
+      rank: +r.rank,
+      points: +r.points || 0,
+      move: prevRank ? prevRank - +r.rank : 0,
+      tour: key,
+      wd: (p.wikidata_id || '').trim() || null,   // Wikidata-ID für Wikipedia-Link
+    };
+  }).filter(e => e.name && e.country);
+
   return {
     label: src.label,
     updated: fmtDate(latest),
     source: 'Jeff Sackmann / GitHub',
     list,
     germans,
+    search,
   };
 }
 
@@ -154,15 +174,29 @@ async function buildTour(key) {
 async function main() {
   await mkdir(DATA_DIR, { recursive: true });
   let ok = 0;
+  let searchPlayers = [];
+  let searchUpdated = null;
   for (const key of Object.keys(SOURCES)) {
     try {
       const data = await buildTour(key);
-      await writeFile(join(DATA_DIR, `rankings-${key}.json`), JSON.stringify(data, null, 2) + '\n', 'utf8');
-      console.log(`✓ ${key.toUpperCase()}: Top ${data.list.length}, Stand ${data.updated}, #1 ${data.list[0]?.name} (${data.list[0]?.points} P.)`);
+      const { search, ...rankingData } = data;   // search nicht in die Rangliste-Datei
+      await writeFile(join(DATA_DIR, `rankings-${key}.json`), JSON.stringify(rankingData, null, 2) + '\n', 'utf8');
+      searchPlayers = searchPlayers.concat(search);
+      searchUpdated = data.updated;
+      console.log(`✓ ${key.toUpperCase()}: Top ${data.list.length} + Such-DB ${search.length}, Stand ${data.updated}, #1 ${data.list[0]?.name}`);
       ok++;
     } catch (e) {
       console.error(`✗ ${key.toUpperCase()} fehlgeschlagen: ${e.message} – alte Datei bleibt erhalten.`);
     }
+  }
+  // Gemeinsame, durchsuchbare Spieler-Datenbank (ATP + WTA)
+  if (searchPlayers.length) {
+    await writeFile(
+      join(DATA_DIR, 'players-search.json'),
+      JSON.stringify({ updated: searchUpdated, count: searchPlayers.length, players: searchPlayers }) + '\n',
+      'utf8'
+    );
+    console.log(`✓ Such-Datenbank: ${searchPlayers.length} Spieler:innen`);
   }
   if (!ok) { console.error('Keine Tour aktualisiert.'); process.exit(1); }
 }
