@@ -176,6 +176,30 @@ async function buildTour(key) {
 const RESULTS_N = 3;       // so viele letzte Matches je Spieler
 const ROUND_ORDER = { F: 8, BR: 7, SF: 6, QF: 5, R16: 4, RR: 4, R32: 3, R64: 2, R128: 1 };
 
+// Deutsche Runden-Bezeichnung – RICHTIG je nach Turniergröße.
+// (R32 ist bei Grand Slams die 3. Runde, bei einem 32er-Turnier die 1. Runde.)
+function roundLabelDE(round, drawSize) {
+  const fixed = { F: 'Finale', BR: 'Spiel um Platz 3', SF: 'Halbfinale', QF: 'Viertelfinale', RR: 'Gruppenphase' };
+  if (fixed[round]) return fixed[round];
+  const m = /^R(\d+)$/.exec(round || '');
+  if (m) {
+    const n = +m[1];                       // „Runde der letzten n"
+    const ds = +drawSize || 0;
+    const roundNum = ds ? Math.round(Math.log2(ds) - Math.log2(n)) + 1 : 0;
+    if (n === 16 && (!ds || roundNum > 1)) return 'Achtelfinale';
+    if (roundNum >= 1) return roundNum + '. Runde';
+    return 'Runde';
+  }
+  return round || 'Runde';
+}
+// Ergebnis lesbar machen: W/O = kampflos, „… RET" = Aufgabe
+function cleanScore(sc) {
+  sc = (sc || '').trim();
+  if (!sc) return '';
+  if (/^w\/?o$/i.test(sc) || /walkover/i.test(sc) || /^(def|default)$/i.test(sc)) return 'kampflos';
+  return sc.replace(/\s*(ret|def|default)\.?$/i, ' · Aufgabe').replace(/\s+/g, ' ');
+}
+
 async function buildResults(key, search) {
   const src = SOURCES[key];
   let rows;
@@ -191,16 +215,17 @@ async function buildResults(key, search) {
       if (!pid || !want.has(pid)) return;
       (byPlayer[pid] = byPlayer[pid] || []).push({
         d: r.tourney_date, t: (r.tourney_name || '').trim(), s: r.surface || '',
-        r: r.round || '', o: fixName((r[opp + '_name'] || '').trim()),
-        w: me === 'winner' ? 1 : 0, sc: (r.score || '').trim(),
+        round: r.round || '', ds: r.draw_size, o: fixName((r[opp + '_name'] || '').trim()),
+        w: me === 'winner' ? 1 : 0, sc: cleanScore(r.score),
       });
     });
   }
-  const sortKey = (m) => (m.d || '') + String(ROUND_ORDER[m.r] || 0).padStart(2, '0');
+  const sortKey = (m) => (m.d || '') + String(ROUND_ORDER[m.round] || 0).padStart(2, '0');
   const results = {};
   let lastDate = null;
   for (const pid in byPlayer) {
-    const arr = byPlayer[pid].sort((a, b) => sortKey(b).localeCompare(sortKey(a))).slice(0, RESULTS_N);
+    const arr = byPlayer[pid].sort((a, b) => sortKey(b).localeCompare(sortKey(a))).slice(0, RESULTS_N)
+      .map(m => ({ d: m.d, t: m.t, s: m.s, r: roundLabelDE(m.round, m.ds), o: m.o, w: m.w, sc: m.sc }));
     if (arr.length) { results[`${key}-${pid}`] = arr; if (!lastDate || arr[0].d > lastDate) lastDate = arr[0].d; }
   }
   return { results, lastDate };

@@ -498,7 +498,8 @@
         el('span', { class: 'result-badge ' + (m.w ? 'is-win' : 'is-loss') }, m.w ? 'S' : 'N'),
         el('div', { class: 'result-main' },
           el('div', { class: 'result-opp' }, (m.w ? 'Sieg gegen ' : 'Niederlage gegen ') + m.o),
-          el('div', { class: 'result-meta' }, [m.t, ROUND_DE[m.r] || m.r, m.sc].filter(Boolean).join(' · '))))));
+          el('div', { class: 'result-meta' }, [m.t, ROUND_DE[m.r] || m.r].filter(Boolean).join(' · ')),
+          m.sc ? el('div', { class: 'result-score' }, m.sc) : null))));
   }
 
   // Einheitliche Spielerzeile (kuratiert oder gesucht), mit +/✓-Knopf.
