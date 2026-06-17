@@ -54,10 +54,18 @@ auf eingebaute Beispieldaten zurück.
 Das ist der Clou dieser App: **Du brauchst keinen API-Schlüssel, keine Anmeldung, nichts
 zu bezahlen.**
 
-- Die **Weltrangliste (ATP & WTA)** kommt aus zwei kleinen Dateien im Ordner `data/`.
-- Ein kleines Skript (`scripts/update-rankings.mjs`) holt die aktuelle Rangliste aus einer
-  **offenen, kostenlosen Datenquelle** ([Jeff Sackmanns Tennis-Datensätze](https://github.com/JeffSackmann)
-  – seit Jahren gepflegt, tagesaktuell) und schreibt sie in diese Dateien.
+- Die **Weltrangliste (ATP & WTA)**, die **durchsuchbare Spieler-Datenbank** und die
+  **jüngsten Match-Ergebnisse** kommen aus kleinen Dateien im Ordner `data/`.
+- Ein kleines Skript (`scripts/update-rankings.mjs`) holt die aktuellen Daten aus einer
+  **offenen, kostenlosen Datenquelle** ([„TennisCourtLog"](https://github.com/LuckyLoser91/TennisCourtLog)
+  – Ranglisten/Spieler aus Jeff Sackmanns Datensätzen, laufende Ergebnisse von
+  tennis-data.co.uk, montags automatisch aktualisiert) und schreibt sie in diese Dateien.
+  Das Skript rechnet die Quelle per Adapter in das App-Format um.
+
+  > **Warum nicht mehr Jeff Sackmann direkt?** Dessen Original-Repos
+  > (`JeffSackmann/tennis_atp` & `_wta`) sind im Juni 2026 offline gegangen. Falls auch
+  > die jetzige Quelle einmal ausfällt: einfach die `SOURCES`-URLs oben in
+  > `scripts/update-rankings.mjs` auf einen neuen Anbieter umstellen.
 - Eine **GitHub Action** (`.github/workflows/update-rankings.yml`) führt dieses Skript
   **1× pro Tag automatisch** in der Cloud aus – dein Mac muss dafür **nicht** an sein.
 - Die App liest dann einfach die Dateien. Schlägt mal etwas fehl (offline, Quelle kurz weg),
@@ -181,9 +189,11 @@ Die Datei, die du am ehesten von Hand anpasst, ist **`js/data.js`** (ausführlic
   1×/Tag fertige kleine JSON-Dateien. Vorteile: **kostenlos, kein Schlüssel im Browser,
   blitzschnell, mobilfreundlich** – und robust, weil die App jederzeit auf Cache/Demo
   zurückfallen kann.
-- **Quelle: [Jeff Sackmanns offene Tennis-Datensätze](https://github.com/JeffSackmann)** –
-  etabliert, kostenlos, schlüssellos, tagesaktuell. Der Abruf steckt sauber gekapselt in
-  `scripts/update-rankings.mjs` (leicht austauschbar).
+- **Quelle: [TennisCourtLog](https://github.com/LuckyLoser91/TennisCourtLog)** – kostenlos,
+  schlüssellos, montags aktualisiert; laufende Ergebnisse von tennis-data.co.uk (unabhängig,
+  läuft also weiter, seit Jeff Sackmanns Original-Repos im Juni 2026 offline gingen). Der
+  Abruf inkl. Format-Adapter steckt sauber gekapselt in `scripts/update-rankings.mjs`
+  (leicht austauschbar – nur die `SOURCES`-URLs).
 - **Live-Ticker bewusst als Demo.** Echte Live-Spielstände sind durchweg kostenpflichtig
   (ab ~40 $/Monat); für eine Geschenk-App nicht sinnvoll. Die Demo zeigt realistisch, wie es
   während der Turniere aussähe.

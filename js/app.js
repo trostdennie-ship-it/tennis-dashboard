@@ -310,7 +310,7 @@
   function rankingScreen() {
     const data = window.TennisData.getRankings(rankTour);
     const list = data.list;
-    const top = list[0].points;
+    const top = Math.max(1, ...list.map(p => p.points || 0));
     const podium = list.slice(0, 3);
     const rest = list.slice(3);
     const germans = (data.germans && data.germans.length) ? data.germans : (T.GERMANS[rankTour] || []);
@@ -341,7 +341,7 @@
     const listSec = section('Plätze 4 – 20', { style: 'margin-top:22px' },
       el('div', { class: 'card card--flush' }, rest.map(p => rankRow(p, top))),
       el('div', { class: 'foot-note' },
-        'Punkte aus den letzten 52 Wochen. Quelle: ' + (rankTour === 'atp' ? 'ATP Tour' : 'WTA Tour') + '. Aktualisierung jeden Montag.'));
+        'Rangliste der ' + (rankTour === 'atp' ? 'ATP' : 'WTA') + '. Punkte als Richtwert. Aktualisierung jeden Montag.'));
 
     const deSec = germans.length ? section('🇩🇪 Deutsche im Feld', null,
       el('div', { class: 'card card--flush' }, germans.map(g =>

@@ -36,7 +36,7 @@ jobs:
       - name: Node einrichten
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Aktuelle Rangliste holen
         run: node scripts/update-rankings.mjs
@@ -45,10 +45,10 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/rankings-atp.json data/rankings-wta.json
+          git add data/rankings-atp.json data/rankings-wta.json data/players-search.json data/recent-results.json
           if git diff --staged --quiet; then
-            echo "Keine Änderung – Rangliste ist bereits aktuell."
+            echo "Keine Änderung – Daten sind bereits aktuell."
           else
-            git commit -m "Rangliste automatisch aktualisiert ($(date -u +%Y-%m-%d))"
+            git commit -m "Rangliste & Ergebnisse automatisch aktualisiert ($(date -u +%Y-%m-%d))"
             git push
           fi
