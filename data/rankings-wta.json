@@ -1,13 +1,13 @@
 {
   "label": "WTA Damen",
-  "updated": "2026-06-14",
+  "updated": "2026-06-21",
   "source": "tennis-data.co.uk · TennisCourtLog",
   "list": [
     {
       "rank": 1,
       "name": "Aryna Sabalenka",
       "country": "BLR",
-      "points": 9960,
+      "points": 9090,
       "move": 0,
       "age": 28,
       "de": false
@@ -34,7 +34,7 @@
       "rank": 4,
       "name": "Iga Świątek",
       "country": "POL",
-      "points": 6749,
+      "points": 6056,
       "move": 0,
       "age": 25,
       "de": false
@@ -61,7 +61,7 @@
       "rank": 7,
       "name": "Elina Svitolina",
       "country": "UKR",
-      "points": 4315,
+      "points": 4879,
       "move": 0,
       "age": 31,
       "de": false
@@ -70,7 +70,7 @@
       "rank": 8,
       "name": "Jasmine Paolini",
       "country": "ITA",
-      "points": 4181,
+      "points": 4315,
       "move": 0,
       "age": 30,
       "de": false
@@ -88,7 +88,7 @@
       "rank": 10,
       "name": "Mirra Andreeva",
       "country": "RUS",
-      "points": 3318,
+      "points": 3388,
       "move": 0,
       "age": 19,
       "de": false
@@ -115,7 +115,7 @@
       "rank": 13,
       "name": "Ekaterina Alexandrova",
       "country": "RUS",
-      "points": 2787,
+      "points": 3054,
       "move": 0,
       "age": 31,
       "de": false
@@ -142,7 +142,7 @@
       "rank": 16,
       "name": "Iva Jovic",
       "country": "USA",
-      "points": 2341,
+      "points": 2387,
       "move": 0,
       "age": 18,
       "de": false
@@ -151,7 +151,7 @@
       "rank": 17,
       "name": "Madison Keys",
       "country": "USA",
-      "points": 2341,
+      "points": 2387,
       "move": 0,
       "age": 31,
       "de": false
@@ -160,7 +160,7 @@
       "rank": 18,
       "name": "Clara Tauson",
       "country": "DEN",
-      "points": 2341,
+      "points": 2387,
       "move": 0,
       "age": 23,
       "de": false
@@ -169,7 +169,7 @@
       "rank": 19,
       "name": "Diana Shnaider",
       "country": "RUS",
-      "points": 2341,
+      "points": 2387,
       "move": 0,
       "age": 22,
       "de": false
@@ -178,7 +178,7 @@
       "rank": 20,
       "name": "Elise Mertens",
       "country": "BEL",
-      "points": 1920,
+      "points": 2212,
       "move": 0,
       "age": 30,
       "de": false

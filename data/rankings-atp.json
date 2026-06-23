@@ -1,6 +1,6 @@
 {
   "label": "ATP Herren",
-  "updated": "2026-06-14",
+  "updated": "2026-06-21",
   "source": "tennis-data.co.uk · TennisCourtLog",
   "list": [
     {
@@ -25,7 +25,7 @@
       "rank": 3,
       "name": "Alexander Zverev",
       "country": "GER",
-      "points": 5705,
+      "points": 7190,
       "move": 0,
       "age": 29,
       "de": true
@@ -34,7 +34,7 @@
       "rank": 4,
       "name": "Novak Djokovic",
       "country": "SRB",
-      "points": 4440,
+      "points": 4390,
       "move": 0,
       "age": 39,
       "de": false
@@ -43,7 +43,7 @@
       "rank": 5,
       "name": "Lorenzo Musetti",
       "country": "ITA",
-      "points": 3920,
+      "points": 4070,
       "move": 0,
       "age": 24,
       "de": false
@@ -52,7 +52,7 @@
       "rank": 6,
       "name": "Alex de Minaur",
       "country": "AUS",
-      "points": 3905,
+      "points": 4060,
       "move": 0,
       "age": 27,
       "de": false
@@ -61,7 +61,7 @@
       "rank": 7,
       "name": "Félix Auger-Aliassime",
       "country": "CAN",
-      "points": 3855,
+      "points": 3810,
       "move": 0,
       "age": 25,
       "de": false
@@ -79,7 +79,7 @@
       "rank": 9,
       "name": "Taylor Fritz",
       "country": "USA",
-      "points": 3720,
+      "points": 3635,
       "move": 0,
       "age": 28,
       "de": false
@@ -88,7 +88,7 @@
       "rank": 10,
       "name": "Daniil Medvedev",
       "country": "RUS",
-      "points": 3320,
+      "points": 3540,
       "move": 0,
       "age": 30,
       "de": false
@@ -97,7 +97,7 @@
       "rank": 11,
       "name": "Alexander Bublik",
       "country": "KAZ",
-      "points": 2930,
+      "points": 3020,
       "move": 0,
       "age": 29,
       "de": false
@@ -106,7 +106,7 @@
       "rank": 12,
       "name": "Casper Ruud",
       "country": "NOR",
-      "points": 2575,
+      "points": 2640,
       "move": 0,
       "age": 27,
       "de": false
@@ -142,7 +142,7 @@
       "rank": 16,
       "name": "Flavio Cobolli",
       "country": "ITA",
-      "points": 2275,
+      "points": 2300,
       "move": 0,
       "age": 24,
       "de": false
@@ -160,7 +160,7 @@
       "rank": 18,
       "name": "Tommy Paul",
       "country": "USA",
-      "points": 2180,
+      "points": 2260,
       "move": 0,
       "age": 29,
       "de": false
@@ -169,7 +169,7 @@
       "rank": 19,
       "name": "Francisco Cerundolo",
       "country": "ARG",
-      "points": 2103,
+      "points": 2260,
       "move": 0,
       "age": 27,
       "de": false
