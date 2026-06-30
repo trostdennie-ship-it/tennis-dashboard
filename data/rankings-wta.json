@@ -1,6 +1,6 @@
 {
   "label": "WTA Damen",
-  "updated": "2026-06-21",
+  "updated": "2026-06-27",
   "source": "tennis-data.co.uk · TennisCourtLog",
   "list": [
     {
@@ -25,7 +25,7 @@
       "rank": 3,
       "name": "Coco Gauff",
       "country": "USA",
-      "points": 7273,
+      "points": 6733,
       "move": 0,
       "age": 22,
       "de": false
@@ -43,7 +43,7 @@
       "rank": 5,
       "name": "Jessica Pegula",
       "country": "USA",
-      "points": 5848,
+      "points": 5751,
       "move": 0,
       "age": 32,
       "de": false
@@ -52,7 +52,7 @@
       "rank": 6,
       "name": "Amanda Anisimova",
       "country": "USA",
-      "points": 5848,
+      "points": 5751,
       "move": 0,
       "age": 24,
       "de": false
@@ -70,7 +70,7 @@
       "rank": 8,
       "name": "Jasmine Paolini",
       "country": "ITA",
-      "points": 4315,
+      "points": 4423,
       "move": 0,
       "age": 30,
       "de": false
@@ -88,7 +88,7 @@
       "rank": 10,
       "name": "Mirra Andreeva",
       "country": "RUS",
-      "points": 3388,
+      "points": 3489,
       "move": 0,
       "age": 19,
       "de": false
@@ -97,7 +97,7 @@
       "rank": 11,
       "name": "Belinda Bencic",
       "country": "SUI",
-      "points": 3145,
+      "points": 3438,
       "move": 0,
       "age": 29,
       "de": false
@@ -124,7 +124,7 @@
       "rank": 14,
       "name": "Linda Nosková",
       "country": "CZE",
-      "points": 2679,
+      "points": 2617,
       "move": 0,
       "age": 21,
       "de": false
@@ -133,7 +133,7 @@
       "rank": 15,
       "name": "Naomi Osaka",
       "country": "JPN",
-      "points": 2387,
+      "points": 2571,
       "move": 0,
       "age": 28,
       "de": false
@@ -142,7 +142,7 @@
       "rank": 16,
       "name": "Iva Jovic",
       "country": "USA",
-      "points": 2387,
+      "points": 2458,
       "move": 0,
       "age": 18,
       "de": false
@@ -151,7 +151,7 @@
       "rank": 17,
       "name": "Madison Keys",
       "country": "USA",
-      "points": 2387,
+      "points": 2449,
       "move": 0,
       "age": 31,
       "de": false
@@ -160,7 +160,7 @@
       "rank": 18,
       "name": "Clara Tauson",
       "country": "DEN",
-      "points": 2387,
+      "points": 2415,
       "move": 0,
       "age": 23,
       "de": false
@@ -169,7 +169,7 @@
       "rank": 19,
       "name": "Diana Shnaider",
       "country": "RUS",
-      "points": 2387,
+      "points": 2411,
       "move": 0,
       "age": 22,
       "de": false
