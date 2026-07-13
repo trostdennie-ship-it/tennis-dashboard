@@ -1,13 +1,13 @@
 {
   "label": "ATP Herren",
-  "updated": "2026-06-21",
+  "updated": "2026-07-12",
   "source": "tennis-data.co.uk · TennisCourtLog",
   "list": [
     {
       "rank": 1,
       "name": "Carlos Alcaraz",
       "country": "ESP",
-      "points": 14750,
+      "points": 13450,
       "move": 0,
       "age": 23,
       "de": false
@@ -43,7 +43,7 @@
       "rank": 5,
       "name": "Lorenzo Musetti",
       "country": "ITA",
-      "points": 4070,
+      "points": 4160,
       "move": 0,
       "age": 24,
       "de": false
@@ -52,7 +52,7 @@
       "rank": 6,
       "name": "Alex de Minaur",
       "country": "AUS",
-      "points": 4060,
+      "points": 4110,
       "move": 0,
       "age": 27,
       "de": false
@@ -61,7 +61,7 @@
       "rank": 7,
       "name": "Félix Auger-Aliassime",
       "country": "CAN",
-      "points": 3810,
+      "points": 3765,
       "move": 0,
       "age": 25,
       "de": false
@@ -79,7 +79,7 @@
       "rank": 9,
       "name": "Taylor Fritz",
       "country": "USA",
-      "points": 3635,
+      "points": 3580,
       "move": 0,
       "age": 28,
       "de": false
@@ -88,7 +88,7 @@
       "rank": 10,
       "name": "Daniil Medvedev",
       "country": "RUS",
-      "points": 3540,
+      "points": 3460,
       "move": 0,
       "age": 30,
       "de": false
@@ -97,7 +97,7 @@
       "rank": 11,
       "name": "Alexander Bublik",
       "country": "KAZ",
-      "points": 3020,
+      "points": 2620,
       "move": 0,
       "age": 29,
       "de": false
@@ -106,7 +106,7 @@
       "rank": 12,
       "name": "Casper Ruud",
       "country": "NOR",
-      "points": 2640,
+      "points": 2425,
       "move": 0,
       "age": 27,
       "de": false
@@ -115,7 +115,7 @@
       "rank": 13,
       "name": "Jiří Lehečka",
       "country": "CZE",
-      "points": 2460,
+      "points": 2420,
       "move": 0,
       "age": 24,
       "de": false
@@ -124,7 +124,7 @@
       "rank": 14,
       "name": "Karen Khachanov",
       "country": "RUS",
-      "points": 2340,
+      "points": 2360,
       "move": 0,
       "age": 30,
       "de": false
@@ -151,7 +151,7 @@
       "rank": 17,
       "name": "Alejandro Davidovich Fokina",
       "country": "ESP",
-      "points": 2260,
+      "points": 2270,
       "move": 0,
       "age": 27,
       "de": false
@@ -160,7 +160,7 @@
       "rank": 18,
       "name": "Tommy Paul",
       "country": "USA",
-      "points": 2260,
+      "points": 2255,
       "move": 0,
       "age": 29,
       "de": false
@@ -169,7 +169,7 @@
       "rank": 19,
       "name": "Francisco Cerundolo",
       "country": "ARG",
-      "points": 2260,
+      "points": 2180,
       "move": 0,
       "age": 27,
       "de": false

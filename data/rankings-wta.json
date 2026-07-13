@@ -1,6 +1,6 @@
 {
   "label": "WTA Damen",
-  "updated": "2026-06-27",
+  "updated": "2026-07-11",
   "source": "tennis-data.co.uk · TennisCourtLog",
   "list": [
     {
@@ -25,7 +25,7 @@
       "rank": 3,
       "name": "Coco Gauff",
       "country": "USA",
-      "points": 6733,
+      "points": 6409,
       "move": 0,
       "age": 22,
       "de": false
@@ -34,7 +34,7 @@
       "rank": 4,
       "name": "Iga Świątek",
       "country": "POL",
-      "points": 6056,
+      "points": 5881,
       "move": 0,
       "age": 25,
       "de": false
@@ -43,7 +43,7 @@
       "rank": 5,
       "name": "Jessica Pegula",
       "country": "USA",
-      "points": 5751,
+      "points": 5653,
       "move": 0,
       "age": 32,
       "de": false
@@ -52,7 +52,7 @@
       "rank": 6,
       "name": "Amanda Anisimova",
       "country": "USA",
-      "points": 5751,
+      "points": 5523,
       "move": 0,
       "age": 24,
       "de": false
@@ -70,7 +70,7 @@
       "rank": 8,
       "name": "Jasmine Paolini",
       "country": "ITA",
-      "points": 4423,
+      "points": 4471,
       "move": 0,
       "age": 30,
       "de": false
@@ -79,7 +79,7 @@
       "rank": 9,
       "name": "Victoria Mboko",
       "country": "CAN",
-      "points": 3670,
+      "points": 3878,
       "move": 0,
       "age": 19,
       "de": false
@@ -97,7 +97,7 @@
       "rank": 11,
       "name": "Belinda Bencic",
       "country": "SUI",
-      "points": 3438,
+      "points": 3385,
       "move": 0,
       "age": 29,
       "de": false
@@ -106,7 +106,7 @@
       "rank": 12,
       "name": "Karolína Muchová",
       "country": "CZE",
-      "points": 3054,
+      "points": 3359,
       "move": 0,
       "age": 29,
       "de": false
@@ -115,7 +115,7 @@
       "rank": 13,
       "name": "Ekaterina Alexandrova",
       "country": "RUS",
-      "points": 3054,
+      "points": 3156,
       "move": 0,
       "age": 31,
       "de": false
@@ -124,7 +124,7 @@
       "rank": 14,
       "name": "Linda Nosková",
       "country": "CZE",
-      "points": 2617,
+      "points": 2846,
       "move": 0,
       "age": 21,
       "de": false
@@ -133,7 +133,7 @@
       "rank": 15,
       "name": "Naomi Osaka",
       "country": "JPN",
-      "points": 2571,
+      "points": 2458,
       "move": 0,
       "age": 28,
       "de": false
@@ -142,7 +142,7 @@
       "rank": 16,
       "name": "Iva Jovic",
       "country": "USA",
-      "points": 2458,
+      "points": 2436,
       "move": 0,
       "age": 18,
       "de": false
@@ -151,7 +151,7 @@
       "rank": 17,
       "name": "Madison Keys",
       "country": "USA",
-      "points": 2449,
+      "points": 2423,
       "move": 0,
       "age": 31,
       "de": false
@@ -178,7 +178,7 @@
       "rank": 20,
       "name": "Elise Mertens",
       "country": "BEL",
-      "points": 2212,
+      "points": 2240,
       "move": 0,
       "age": 30,
       "de": false
